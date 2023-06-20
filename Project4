@@ -1,0 +1,65 @@
+ import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("movies.csv")
+print(df)
+
+
+data=(df.head(20))
+print(data)
+
+
+print(data.info())
+print(data.describe())
+print(data.isnull().sum())
+
+ # plot a graph to show the distribution of genre in the top 250 movies 
+    
+gp = data.groupby("genre").agg({"movie_id":"count"})
+print(gp)
+
+#1 plot a graph to show the distribution of genre in the top 250 movies 
+
+exp = [0,0,0,0,0,0,0,0,0,0.2,0,0,0]
+plt.pie(gp["movie_id"],labels=gp.index,explode = exp,autopct = "%1.2f%%",shadow=True)
+plt.title("Distribution of top 20  movies out of 250 movies in %",color= "Blue")
+plt.legend(bbox_to_anchor = (1.5,1.1))
+plt.show()
+
+#2 maximum number of votes of movie 
+
+df["imbd_votes"]=df["imbd_votes"].str.replace(",","").astype(int)
+data = (df["imbd_votes"].max())
+print("Votes ",data)
+print()
+
+# which genre it belongs to and its duration.
+
+Max = df[df["imbd_votes"] == df["imbd_votes"].max()]
+print("Movies", Max["title"].values[0])
+print("Genre" ,Max["genre"].values[0])
+print("Duration", Max["duration"].values[0])
+
+
+
+#3 minimum number of votes of movie
+
+data = (df["imbd_votes"].min())
+print("Votes", data)
+print()
+
+#3  which genre it belongs to and its duration.
+
+Min = df[df["imbd_votes"] == df["imbd_votes"].min()]
+print("Movies", Min["title"].values[0])
+print("Genre" ,Min["genre"].values[0])
+print("Duration", Min["duration"].values[0])
+
+
+
+#4 find out movies of each genre which has maximum number of votes. 
+
+max_votes = df.groupby("genre").agg({"imbd_votes":"max"})
+print(max_votes)
